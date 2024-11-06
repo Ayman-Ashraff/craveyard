@@ -1,0 +1,28 @@
+﻿@page "/login"
+@using Microsoft.AspNetCore.Components.Forms
+@using craveyard.Server.Repositories
+@inject IUserRepository userRepository
+
+<h3>Login Here</h3>
+<EditForm Model="user" OnValidSubmit="Login_submit">
+    <label>Username</label>
+    <InputText @bind-Value="user.Username"></InputText>
+    <br>
+    <label>Password</label>
+    <InputText @bind-Value="user.Password" type="password"></InputText>
+    <br>
+    <button type="submit">Login</button>
+</EditForm>
+
+<p>@message</p>
+
+@code {
+    private User user = new User();
+    private string message;
+
+    private void Login_submit()
+    {
+        var userfound = userRepository.LoginUser(user.Username, user.Password);
+        message = userfound != null ? "Login successful!" : "Login failed. Please check your credentials.";
+    }
+}
